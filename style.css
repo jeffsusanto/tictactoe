@@ -1,24 +1,158 @@
-html, body{
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+}
+
+html,
+body {
     margin: 0;
-    padding: 0;
-    height: 100%;
-    background-color: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+}
+
+:root {
+    --cell-size: 100px;
+    --mark-size: calc(var(--cell-size)*.9);
 }
 
 .container {
-    width: 400px;
-    height: 400px;
-    background-color: white;
+    width: 100vw;
+    height: 100vh;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    justify-content: center;
+    align-content: center;
+    justify-items: center;
+    align-items: center;
+    grid-template-columns: repeat(3, auto);
 }
 
-.row{
-    border: 2px solid black;
-    width: 130px;
-    height: 130px;
+.row {
+    width: var(--cell-size);
+    height: var(--cell-size);
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+/* remove borders */
+.row:first-child,
+.row:nth-child(2),
+.row:nth-child(3) {
+    border-top: none;
+}
+
+.row.x,
+.row.circle {
+    cursor: not-allowed;
+}
+
+.row:nth-child(3n+1) {
+    border-left: none;
+}
+
+.row:nth-child(3n+3) {
+    border-right: none;
+}
+
+.row:last-child,
+.row:nth-child(8),
+.row:nth-child(7) {
+    border-bottom: none;
+}
+
+/** displays X when hovering **/
+.row.x::before,
+.row.x::after,
+.row.row.circle::before {
+    background-color: black;
+}
+
+.row.x::before,
+.row.x::after,
+.container.x .row:not(.x):not(.circle):hover::before,
+.container.x .row:not(.x):not(.circle):hover::after {
+    content: '';
+    position: absolute;
+    width: calc(var(--mark-size)*.15);
+    height: var(--mark-size);
+    background-color: black;
+}
+
+.row.x::before,
+.container.x .row:not(.x):not(.circle):hover::before {
+    transform: rotate(45deg);
+}
+
+.row.x::after,
+.container.x .row:not(.x):not(.circle):hover::after {
+    transform: rotate(-45deg);
+}
+
+.container.x .row:not(.x):not(.circle):hover::before,
+.container.x .row:not(.x):not(.circle):hover::after {
+    background-color: lightgray;
+}
+
+/** displays O when hovering **/
+
+.container.circle .row:not(.x):not(.circle):hover::before{
+    background-color: lightgray;
+}
+
+.row.circle::before,
+.row.circle::after,
+.container.circle .row:not(.x):not(.circle):hover::before,
+.container.circle .row:not(.x):not(.circle):hover::before {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+}
+
+.row.circle::before,
+.container.circle .row:not(.x):not(.circle):hover::before {
+    width: var(--mark-size);
+    height: var(--mark-size);
+}
+
+.row.circle::after,
+.container.circle .row:not(.x):not(.circle):hover::after {
+    width: calc(var(--mark-size)*.7);
+    height: calc(var(--mark-size)*.7);
+    background-color: white;
+}
+
+/* button styles */
+.winning-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.692);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 5rem;
+}
+
+.winning-message button {
+    font-size: 3rem;
+    background-color: white;
+    border: 1px solid black;
+    padding: .25em .5em;
+    cursor: pointer;
+}
+
+.winning-message button:hover {
+    background-color: black;
+    color: white;
+    border-color: white;
+}
+
+.winning-message.show{
+    display: flex;
 }
